@@ -393,6 +393,29 @@ def update_last_day(user_id, day):
     conn.commit()
     conn.close()
 
+def get_user_state(user_id):
+    conn = sqlite3.connect("users.db")
+    c = conn.cursor()
+    c.execute("SELECT start_date, last_day, blocked, subscribed FROM users WHERE user_id = ?", (user_id,))
+    row = c.fetchone()
+    conn.close()
+    return row  # None, если пользователя ещё нет в базе
+
+def restore_user_state(user_id, state):
+    conn = sqlite3.connect("users.db")
+    c = conn.cursor()
+    if state is None:
+        # До теста пользователя в базе не было - убираем тестовую запись
+        c.execute("DELETE FROM users WHERE user_id = ?", (user_id,))
+    else:
+        start_date, last_day, blocked, subscribed = state
+        c.execute(
+            "UPDATE users SET start_date = ?, last_day = ?, blocked = ?, subscribed = ? WHERE user_id = ?",
+            (start_date, last_day, blocked, subscribed, user_id)
+        )
+    conn.commit()
+    conn.close()
+
 def user_exists(user_id):
     conn = sqlite3.connect("users.db")
     c = conn.cursor()
@@ -738,7 +761,11 @@ async def test_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     user_id = update.effective_user.id
-    await update.message.reply_text("🧪 Запускаю тестовый режим...")
+
+    # Запоминаем твоё реальное состояние в базе до теста
+    saved_state = get_user_state(user_id)
+
+    await update.message.reply_text("🧪 Запускаю тестовый режим (это не повлияет на твой реальный прогресс)...")
 
     await send_welcome(context.bot, user_id)
     await asyncio.sleep(2)
@@ -748,7 +775,10 @@ async def test_mode(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await asyncio.sleep(2)
         await send_day(context.bot, user_id, day)
 
-    await update.message.reply_text("✅ Тест завершён!")
+    # Возвращаем базу в исходное состояние, как будто теста не было
+    restore_user_state(user_id, saved_state)
+
+    await update.message.reply_text("✅ Тест завершён! Твой реальный прогресс в базе не изменился.")
 
 # ==================== ЗАПУСК ====================
 
