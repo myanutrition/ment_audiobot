@@ -11,7 +11,7 @@ from telegram.ext import (
 
 # ==================== НАСТРОЙКИ ====================
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-CHANNEL_USERNAME = "@mya_mentoring"
+CHANNEL_USERNAME = "@myanutrition"
 SEND_HOUR = 7
 SEND_MINUTE = 0
 ADMIN_CHAT_ID = 7917196527  # твой личный chat_id для уведомлений
