@@ -11,7 +11,7 @@ from telegram.ext import (
 
 # ==================== НАСТРОЙКИ ====================
 BOT_TOKEN = os.getenv("BOT_TOKEN")
-CHANNEL_USERNAME = "@myanutrition"
+CHANNEL_USERNAME = -1002753031704
 SEND_HOUR = 7
 SEND_MINUTE = 0
 ADMIN_CHAT_ID = 7917196527  # твой личный chat_id для уведомлений
@@ -193,7 +193,7 @@ TEXT_FINAL = (
 
 def kb_subscribe():
     return InlineKeyboardMarkup([
-        [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/mya_mentoring")],
+        [InlineKeyboardButton("📢 Подписаться на канал", url="https://t.me/+8cp1cR3NMRsyODQy")],
         [InlineKeyboardButton("✅ Я подписался(ась)", callback_data="check_sub")],
     ])
 
@@ -267,7 +267,7 @@ BUTTON_URLS = {
     "day6_mentorship": "http://myanutrition.ru/mentorstvo",
     "day7_podcast": "https://podcast.ru/1855545693",
     "day7_mentorship": "http://myanutrition.ru/mentorstvo",
-    "final_channel": "https://t.me/mya_mentoring",
+    "final_channel": "https://t.me/+8cp1cR3NMRsyODQy",
     "final_podcast": "https://podcast.ru/1855545693",
     "final_mentorship": "http://myanutrition.ru/mentorstvo",
     "final_waitlist": "https://t.me/+Gwu8V5HIfUNmNGY6",
